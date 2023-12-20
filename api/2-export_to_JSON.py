@@ -1,35 +1,30 @@
 #!/usr/bin/python3
-""" script to export data in the JSON format """
+"""Script that export data in JSON format"""
+
 import json
 import requests
-from sys import argv
+import sys
 
 API_URL = 'https://jsonplaceholder.typicode.com'
 
-
 if __name__ == '__main__':
-    USER_ID = argv[1]
 
-    """ user information """
-    user_response = requests.get(f"{API_URL}/users/{USER_ID}").json()
+    USER_ID = sys.argv[1]
 
-    """ todo list for the given user """
-    todo_response = requests.get(f"{API_URL}/todos?userId={USER_ID}").json()
+    user = requests.get(f'{API_URL}/users/{USER_ID}').json()
+    todo_list = requests.get(f"{API_URL}/todos?userId={USER_ID}").json()
 
-    """ data for export """
+    json_filename = f"{USER_ID}.json"
+
     data = {
         USER_ID: [
             {
                 "task": task['title'],
                 "completed": task['completed'],
-                "username": user_response['username']
+                "username": user['username']
             }
-            for task in todo_response
+            for task in todo_list
         ]
     }
-    """ write to json file """
-
-    with open(f"{USER_ID}.json", mode='w') as json_file:
+    with open(json_filename, 'w') as json_file:
         json.dump(data, json_file)
-
-    print(f"Data as been exported to {USER_ID}.json")
