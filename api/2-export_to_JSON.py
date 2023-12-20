@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Export data  in the JSON format"""
+"""Script that export data in JSON format"""
 
 import json
 import requests
@@ -11,8 +11,7 @@ if __name__ == '__main__':
 
     USER_ID = sys.argv[1]
 
-    user_request = requests.get(f'{API_URL}/users/{USER_ID}').json()
-
+    user = requests.get(f'{API_URL}/users/{USER_ID}').json()
     todo_list = requests.get(f"{API_URL}/todos?userId={USER_ID}").json()
 
     json_filename = f"{USER_ID}.json"
@@ -22,11 +21,10 @@ if __name__ == '__main__':
             {
                 "task": task['title'],
                 "completed": task['completed'],
-                "username": user_request['username']
+                "username": user['username']
             }
             for task in todo_list
         ]
     }
-
     with open(json_filename, 'w') as json_file:
         json.dump(data, json_file)
