@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""Script using REST API for returns information about TODO list
-usin REST API"""
+"""Script that display infos for a given employee"""
 
 import requests
 import sys
@@ -8,22 +7,22 @@ import sys
 API_URL = 'https://jsonplaceholder.typicode.com'
 
 if __name__ == '__main__':
-    user_query = requests.get(f'{API_URL}/users/{sys.argv[1]}')
-    user_data = user_query.json()
+    user_request = requests.get(f'{API_URL}/users/{sys.argv[1]}')
+    user_data = user_request.json()
 
-    todo_list_query = requests.get(f"{API_URL}/todos?userID={sys.argv[1]}")
-    todo_list = todo_list_query.json()
+    todo_list_request = requests.get(f"{API_URL}/todos?userId={sys.argv[1]}")
+    todo_list_data = todo_list_request.json()
 
-    finished_tasks = [task for task in todo_list if task['completed']]
+    completed_tasks = [task for task in todo_list_data if task['completed']]
 
     user_name = user_data["name"]
-    len_finished_tasks = len(finished_tasks)
-    todo = len(todo_list)
+    len_completed_tasks = len(completed_tasks)
+    total_todo = len(todo_list_data)
 
     print("Employee {} is done with tasks({}/{}):".format(
         user_name,
-        len_finished_tasks,
-        todo))
+        len_completed_tasks,
+        total_todo))
 
-    for task in finished_tasks:
+    for task in completed_tasks:
         print(f"\t {task['title']}")
