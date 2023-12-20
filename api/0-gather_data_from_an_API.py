@@ -11,12 +11,12 @@ if __name__ == '__main__':
     user_query = requests.get(f'{API_URL}/users/{sys.argv[1]}')
     user_data = user_query.json()
 
-    todo_list_query = requests.get(f'{API_URL}/todos?userID={sys.argv[1]}')
+    todo_list_query = requests.get(f"{API_URL}/todos?userID={sys.argv[1]}")
     todo_list = todo_list_query.json()
 
     finished_tasks = [task for task in todo_list if task['completed']]
 
-    user_name = user_data['name']
+    user_name = user_data["name"]
     len_finished_tasks = len(finished_tasks)
     todo = len(todo_list)
 
